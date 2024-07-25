@@ -2,9 +2,11 @@ import pickle
 import streamlit as st
 
 # Membaca model
+model_loaded = False
 try:
     with open('feedback_model.sav', 'rb') as file:
         feedback_model = pickle.load(file)
+        model_loaded = True
 except FileNotFoundError:
     st.error("File model tidak ditemukan. Pastikan file berada di jalur yang benar.")
 except Exception as e:
@@ -54,13 +56,16 @@ if submit_button:
     if (is_valid_integer(Age) and is_valid_integer(Gender) and is_valid_integer(Marital_Status) and is_valid_integer(Occupation) and is_valid_integer(Monthly_Income) and is_valid_integer(Educational_Qualifications) and is_valid_integer(Family_size)):
         st.success("All inputs are valid integers.")
         
-        # Perform prediction
-        prediction = predict(Age, Gender, Marital_Status, Occupation, Monthly_Income, Educational_Qualifications, Family_size)
-        
-        # Display prediction result
-        if prediction == 'Positif':
-            st.success("Feedback from customer: Positif")
+        if model_loaded:
+            # Perform prediction
+            prediction = predict(Age, Gender, Marital_Status, Occupation, Monthly_Income, Educational_Qualifications, Family_size)
+            
+            # Display prediction result
+            if prediction == 'Positif':
+                st.success("Feedback from customer: Positif")
+            else:
+                st.error("Feedback from customer: Negatif")
         else:
-            st.error("Feedback from customer: Negatif")
+            st.error("Model tidak tersedia. Tidak dapat melakukan prediksi.")
     else:
         st.error("Please enter valid integer values.")

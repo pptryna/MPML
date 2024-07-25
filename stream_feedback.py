@@ -1,12 +1,10 @@
 import pickle
 import streamlit as st
 
-# Membaca model
-model_loaded = False
+# Membaca model SVM yang sudah dilatih
 try:
-    with open('feedback_model.sav', 'rb') as file:
-        feedback_model = pickle.load(file)
-        model_loaded = True
+    with open('svm_model.sav', 'rb') as file:
+        best_svm_model = pickle.load(file)
 except FileNotFoundError:
     st.error("File model tidak ditemukan. Pastikan file berada di jalur yang benar.")
 except Exception as e:
@@ -21,11 +19,9 @@ def is_valid_integer(value):
         return False
 
 # Function to simulate prediction logic
-def predict(Age, Gender, Marital_Status, Occupation, Monthly_Income, Educational_Qualifications, Family_size):
-    # Placeholder logic for prediction
-    # You can replace this with actual model prediction logic
-    input_data = [[int(Age), int(Gender), int(Marital_Status), int(Occupation), int(Monthly_Income), int(Educational_Qualifications), int(Family_size)]]
-    feedback_prediction = feedback_model.predict(input_data)
+def predict_svm(features):
+    input_data = [features]
+    feedback_prediction = best_svm_model.predict(input_data)
     
     # Menentukan kategori feedback berdasarkan prediksi
     if feedback_prediction[0] == 1:
@@ -36,7 +32,7 @@ def predict(Age, Gender, Marital_Status, Occupation, Monthly_Income, Educational
     return feedback
 
 # Title of the application
-st.title("Prediksi Feedback Customer")
+st.title("Prediksi Feedback Customer Menggunakan SVM")
 
 # Form for user input
 with st.form(key='feedback_form'):
@@ -56,16 +52,19 @@ if submit_button:
     if (is_valid_integer(Age) and is_valid_integer(Gender) and is_valid_integer(Marital_Status) and is_valid_integer(Occupation) and is_valid_integer(Monthly_Income) and is_valid_integer(Educational_Qualifications) and is_valid_integer(Family_size)):
         st.success("All inputs are valid integers.")
         
-        if model_loaded:
+        try:
+            # Prepare features for prediction
+            features = [int(Age), int(Gender), int(Marital_Status), int(Occupation), int(Monthly_Income), int(Educational_Qualifications), int(Family_size)]
+            
             # Perform prediction
-            prediction = predict(Age, Gender, Marital_Status, Occupation, Monthly_Income, Educational_Qualifications, Family_size)
+            prediction = predict_svm(features)
             
             # Display prediction result
             if prediction == 'Positif':
                 st.success("Feedback from customer: Positif")
             else:
                 st.error("Feedback from customer: Negatif")
-        else:
-            st.error("Model tidak tersedia. Tidak dapat melakukan prediksi.")
+        except Exception as e:
+            st.error(f"Error saat melakukan prediksi: {e}")
     else:
         st.error("Please enter valid integer values.")

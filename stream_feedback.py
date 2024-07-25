@@ -4,7 +4,7 @@ import streamlit as st
 # Membaca model SVM yang sudah dilatih
 try:
     with open('feedback_model.sav', 'rb') as file:
-        svm_model = pickle.load(file)
+        best_svm_model = pickle.load(file)
 except FileNotFoundError:
     st.error("File model tidak ditemukan. Pastikan file berada di jalur yang benar.")
 except Exception as e:
@@ -21,7 +21,7 @@ def is_valid_integer(value):
 # Function to simulate prediction logic
 def predict_svm(features):
     input_data = [features]
-    feedback_prediction = svm_model.predict(input_data)
+    feedback_prediction = best_svm_model.predict(input_data)
     
     # Menentukan kategori feedback berdasarkan prediksi
     if feedback_prediction[0] == 1:

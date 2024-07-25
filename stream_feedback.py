@@ -4,7 +4,7 @@ import streamlit as st
 # Membaca model
 try:
     with open('feedback_model.sav', 'rb') as file:
-        resto_model = pickle.load(file)
+        feedback_model = pickle.load(file)
 except FileNotFoundError:
     st.error("File model tidak ditemukan. Pastikan file berada di jalur yang benar.")
 except Exception as e:
@@ -14,37 +14,33 @@ except Exception as e:
 st.title('Prediksi Feedback Konsumen')
 
 # Input data dengan contoh angka valid untuk pengujian
-Profitability = st.text_input('Profitability', '1')
-MenuCategory_Appetizer = st.text_input('MenuCategory_Appetizer', '0')
-MenuCategory_Beverages = st.text_input('MenuCategory_Beverages', '1')
-MenuCategory_Dessert = st.text_input('MenuCategory_Dessert', '0')
-MenuCategory_MainCourse = st.text_input('MenuCategory_MainCourse', '0')
+Age = st.text_input('Age', '1')
+Marital_Status = st.text_input('Marital Status', '0')
+Occupation = st.text_input('Occupation', '1')
+Educational_Qualifications = st.text_input('Educational Qualifications', '0')
 
-harga_menu = ''
+feedback = ''
 
 # Membuat tombol untuk prediksi
 if st.button('Prediksi'):
     try:
         # Convert input to appropriate data types
-        Profitability = int(Profitability)
-        MenuCategory_Appetizer = int(MenuCategory_Appetizer)
-        MenuCategory_Beverages = int(MenuCategory_Beverages)
-        MenuCategory_Dessert = int(MenuCategory_Dessert)
-        MenuCategory_MainCourse = int(MenuCategory_MainCourse)
-
-        # Melakukan prediksi
-        price_prediction = resto_model.predict([[Profitability, MenuCategory_Appetizer, MenuCategory_Beverages,
-                                                 MenuCategory_Dessert, MenuCategory_MainCourse]])
-
-        # Menentukan kategori harga berdasarkan prediksi
-        if price_prediction[0] == 1:
-            harga_menu = 'low'
-        elif price_prediction[0] == 2:
-            harga_menu = 'medium'
-        else:
-            harga_menu = 'high'
+        Age = int(Age)
+        Marital_Status = int(Marital_Status)
+        Occupation = int(Occupation)
+        Educational_Qualifications = int(Educational_Qualifications)
         
-        st.success(harga_menu)
+        # Melakukan prediksi
+        feedback_prediction = feedback_model.predict([[Age,Marital_Status,Occupation,
+                                                 Educational_Qualifications]])
+
+        # Menentukan kategori feedback berdasarkan prediksi
+        if feedback_prediction[0] == 'Positif':
+            feedback = 'Positif'
+        else:
+            feedback = 'Negatif'
+        
+        st.success(feedback)
 
     except ValueError:
         st.error("Pastikan semua input diisi dengan angka yang valid.")

@@ -3,7 +3,7 @@ import streamlit as st
 
 # Membaca model
 try:
-    with open('resto_model.sav', 'rb') as file:
+    with open('feedback_model.sav', 'rb') as file:
         resto_model = pickle.load(file)
 except FileNotFoundError:
     st.error("File model tidak ditemukan. Pastikan file berada di jalur yang benar.")
@@ -11,7 +11,7 @@ except Exception as e:
     st.error(f"Error saat memuat model: {e}")
 
 # Judul web
-st.title('Prediksi Harga Menu Restoran')
+st.title('Prediksi Feedback Konsumen')
 
 # Input data dengan contoh angka valid untuk pengujian
 Profitability = st.text_input('Profitability', '1')

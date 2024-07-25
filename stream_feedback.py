@@ -3,7 +3,7 @@ import streamlit as st
 
 # Membaca model SVM yang sudah dilatih
 try:
-    with open('svm_model.sav', 'rb') as file:
+    with open('feedback_model.sav', 'rb') as file:
         best_svm_model = pickle.load(file)
 except FileNotFoundError:
     st.error("File model tidak ditemukan. Pastikan file berada di jalur yang benar.")

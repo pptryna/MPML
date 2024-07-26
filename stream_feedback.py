@@ -32,7 +32,7 @@ def predict_rf(features):
     return feedback
 
 # Title of the application
-st.title("Prediksi Feedback Customer Menggunakan SVM")
+st.title("Prediksi Feedback Customer Menggunakan Random Forest")
 
 # Form for user input
 with st.form(key='feedback_form'):

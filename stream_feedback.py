@@ -19,7 +19,7 @@ def is_valid_integer(value):
         return False
 
 # Function to simulate prediction logic
-def predict_svm(features):
+def predict_rf(features):
     input_data = [features]
     feedback_prediction = feedback_model.predict(input_data)
     
@@ -57,7 +57,7 @@ if submit_button:
             features = [int(Age), int(Gender), int(Marital_Status), int(Occupation), int(Monthly_Income), int(Educational_Qualifications), int(Family_size)]
             
             # Perform prediction
-            prediction = predict_svm(features)
+            prediction = predict_rf(features)
             
             # Display prediction result
             if prediction == 'Positif':
